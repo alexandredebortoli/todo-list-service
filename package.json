@@ -26,11 +26,18 @@
     "@nestjs/axios": "^0.1.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
+    "@nestjs/microservices": "^9.1.4",
     "@nestjs/platform-express": "^9.0.0",
+    "@nestjs/sequelize": "^9.0.0",
     "@nestjs/terminus": "^9.1.2",
+    "@types/sequelize": "^4.28.14",
+    "mysql2": "^2.3.3",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
+    "sequelize": "^6.25.3",
+    "sequelize-typescript": "^2.1.5",
+    "sqlite3": "^5.1.2",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

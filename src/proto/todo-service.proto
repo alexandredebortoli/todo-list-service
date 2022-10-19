@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package todoService;
+
+service TodoService {
+  rpc FindOne (Empty) returns (Todos) {}
+  rpc CreateTodo (Empty) returns (Empty) {}
+}
+
+message Empty {}
+
+message Todo {
+  string title = 1;
+  string description = 2;
+  string time = 3;
+  bool completed = 4;
+  string uid = 5;
+}
+
+message Todos {
+  repeated Todo todos = 1;
+}
