@@ -3,8 +3,11 @@ syntax = "proto3";
 package todoService;
 
 service TodoService {
-  rpc FindOne (Empty) returns (Todos) {}
-  rpc CreateTodo (Empty) returns (Empty) {}
+  rpc getAll (Empty) returns (Todos) {}
+  rpc getById (Id) returns (Todo) {}
+  rpc create (Todo) returns (Empty) {}
+  rpc edit (Todo) returns (Empty) {}
+  rpc editStatus (Id) returns (Empty) {}
 }
 
 message Empty {}
@@ -19,4 +22,8 @@ message Todo {
 
 message Todos {
   repeated Todo todos = 1;
+}
+
+message Id {
+  string id = 1;
 }

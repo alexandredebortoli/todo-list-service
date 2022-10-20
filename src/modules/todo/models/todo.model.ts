@@ -9,7 +9,7 @@ export class Todo extends Model {
   id: string;
 
   @Column
-  name: string;
+  title: string;
 
   @Column
   description: string;
