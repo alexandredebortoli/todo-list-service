@@ -13,43 +13,82 @@ export class TodoService {
 
   private logger = new Logger(TodoService.name);
   
-  async getAll() {
+  async getAll():Promise<{ todos: Todo[] }> {
     this.logger.debug('grpc request: get all')
     const todos = await this.todoRepository.findAll();
     return { todos };
   }
 
-  getById(id: string) {
+  async getById(id: string) {
     this.logger.debug('grpc request: get by id');
-    try {
-      const todo = this.todoRepository.findByPk(id);
+    const todo = await this.todoRepository.findOne({ where: { uid: id }});
+    return todo;
+    // try {
+    //   const todo = this.todoRepository.findByPk(id);
 
-      if (!todo) {
-        throw new RpcException("id not found");
-      }
+    //   if (!todo) {
+    //     throw new RpcException("id not found");
+    //   }
 
-      return todo;
-    } catch (error) {
-      this.logger.error(error.message);
-    }
+    //   return {...todo};
+    // } catch (error) {
+    //   this.logger.error(error.message);
+    // }
   }
   
-  create(body) {
+  async create(todo: Todo) {
     this.logger.debug('grpc request: create');
-    try {
-      const prevLength = this.todoRepository.length;
-      this.todoRepository.create({ ...body, uid: UUIDV4()});
+    await this.todoRepository.create({
+      title: todo.title,
+      description: todo.description,
+      time: todo.time,
+      completed: todo.completed,
+      uid: todo.uid
+    });
+    // try {
+    //   const prevLength = this.todoRepository.length;
 
-      if (prevLength == this.todoRepository.length) {
-        throw new RpcException("unable to create todo");
-      }
+    //   this.todoRepository.create({ todo });
 
-      return true;
-    } catch (error) {
-      this.logger.error(error.message);
-    }
+    //   if (prevLength == this.todoRepository.length) {
+    //     throw new RpcException("unable to create todo");
+    //   }
+
+    //   return true;
+    // } catch (error) {
+    //   this.logger.error(error.message);
+    //   return false;
+    // }
   }
 
+  async edit(todo: Todo) {
+    this.logger.debug('grpc request: edit');
+
+
+
+    const oldTodo = await this.todoRepository.findByPk(todo.uid);
+    oldTodo.update(todo);
+    oldTodo.save();
+    
+    // try {
+    //   const todo = this.getById(id);
+
+    //   if (!todo) {
+    //     throw new RpcException("id not found");
+    //   }
+
+    // } catch (error) {
+    //   this.logger.error(error.message);
+    // }
+  }
+
+  async editStatus(id) {
+    this.logger.debug('grpc request: edit status');
+
+    const todo = await this.todoRepository.findOne({ where: { uid: id } });
+    todo.update({ completed: !todo.completed });
+    todo.save();
+  }
 
   createTodo() {
     this.todoRepository.create({

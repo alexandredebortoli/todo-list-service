@@ -7,13 +7,27 @@ import { GrpcMethod } from "@nestjs/microservices";
 export class TodoController {
   constructor(private todoService: TodoService) {}
 
-  @GrpcMethod('TodoService', 'FindOne')
-  findOne() {
-      return this.todoService.getTodos();
+  @GrpcMethod('TodoService', 'getAll')
+  getAll() {
+    return this.todoService.getAll();
   }
 
-  @GrpcMethod('TodoService', 'createTodo')
-  createTodo() {
-    return this.todoService.createTodo();
+  @GrpcMethod('TodoService', 'getById')
+  getById(id) {
+    return this.todoService.getById(id);
+  }
+
+  @GrpcMethod('TodoService', 'create')
+  create(todo) {
+    return this.todoService.create(todo);
+  }
+
+  @GrpcMethod('TodoService', 'edit')
+  edit(todo) {
+    return this.todoService.edit(todo);
+  }
+  @GrpcMethod('TodoService', 'editStatus')
+  editStatus(id) {
+    return this.todoService.editStatus(id);
   }
 }
