@@ -13,97 +13,70 @@ export class TodoService {
 
   private logger = new Logger(TodoService.name);
   
-  async getAll() {
+  async getAll(): Promise<{ todos: Todo[] }> {
     this.logger.debug('grpc request: get all')
-    const todos = await this.todoRepository.findAll();
-    return { todos };
+    try {
+      const todos = await this.todoRepository.findAll();
+      return { todos };
+    } catch (error) {
+      this.logger.error(`grpc response: ${error.message}`);
+    }
   }
 
-  async getById(id) {
+  async getById(id): Promise<Todo> {
     this.logger.debug('grpc request: get by id');
-    const todo = await this.todoRepository.findOne({ where: { uid: id.uid } });
-    return todo;
-    // try {
-    //   const todo = this.todoRepository.findByPk(id);
-
-    //   if (!todo) {
-    //     throw new RpcException("id not found");
-    //   }
-
-    //   return {...todo};
-    // } catch (error) {
-    //   this.logger.error(error.message);
-    // }
+    try {
+      const todo = await this.todoRepository.findOne({ where: { uid: id.uid } });
+      if(!todo) {
+        throw new RpcException('id not found');
+      }
+      return todo;
+    } catch (error) {
+      this.logger.error(`grpc response: ${error.message}`);
+    }
   }
   
-  async create(todo: Todo) {
+  async create(todo: Todo): Promise<void> {
     this.logger.debug('grpc request: create');
-    await this.todoRepository.create({
-      uid: todo.uid,
-      title: todo.title,
-      description: todo.description,
-      time: todo.time,
-      completed: todo.completed
-    });
-    // try {
-    //   const prevLength = this.todoRepository.length;
-
-    //   this.todoRepository.create({ todo });
-
-    //   if (prevLength == this.todoRepository.length) {
-    //     throw new RpcException("unable to create todo");
-    //   }
-
-    //   return true;
-    // } catch (error) {
-    //   this.logger.error(error.message);
-    //   return false;
-    // }
+    try {
+      await this.todoRepository.create({
+        uid: todo.uid,
+        title: todo.title,
+        description: todo.description,
+        time: todo.time,
+        completed: todo.completed
+      });
+      this.logger.debug('grpc response: new todo created successfully')
+    } catch (error) {
+      this.logger.error('grpc response: todo missing required attributes');
+    }
   }
 
   async edit(todo: Todo) {
     this.logger.debug('grpc request: edit');
-
-
-
-    const oldTodo = await this.todoRepository.findByPk(todo.uid);
-    oldTodo.update(todo);
-    oldTodo.save();
-    
-    // try {
-    //   const todo = this.getById(id);
-
-    //   if (!todo) {
-    //     throw new RpcException("id not found");
-    //   }
-
-    // } catch (error) {
-    //   this.logger.error(error.message);
-    // }
+    try {
+      const originalTodo = await this.todoRepository.findOne({ where: { uid: todo.uid } });
+      if (!originalTodo) {
+        throw new RpcException("id not found");
+      }
+      originalTodo.update(todo);
+      originalTodo.save();
+    } catch (error) {
+      this.logger.error(`grpc response: ${error.message}`);
+    }
   }
 
   async editStatus(id) {
     this.logger.debug('grpc request: edit status');
-
-    const todo = await this.todoRepository.findByPk(id);
-    todo.update({ completed: !todo.completed });
-    todo.save();
-  }
-
-  createTodo() {
-    this.todoRepository.create({
-      title: 'novo',
-      description: 'descr',
-      time: 'time',
-      completed: false,
-      uid: '1234'
-    });
-  }
-
-  async getTodos() {
-    const todos = await this.todoRepository.findAll();
-    return {
-      todos
-    };
+    try {
+      const todo = await this.todoRepository.findOne({ where: { uid: id.uid } });
+      if (!todo) {
+        throw new RpcException("id not found");
+      }
+      todo.update({ completed: !todo.completed });
+      todo.save();
+    } catch (error) {
+      this.logger.error(`grpc response: ${error.message}`);
+    }
   }
 }
