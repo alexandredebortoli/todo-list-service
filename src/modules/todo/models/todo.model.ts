@@ -6,7 +6,7 @@ export class Todo extends Model {
     primaryKey: true,
     type: 'string'
   })
-  id: string;
+  uid: string;
 
   @Column
   title: string;
@@ -19,7 +19,4 @@ export class Todo extends Model {
 
   @Column
   completed: boolean;
-
-  @Column
-  uid: string;
 }

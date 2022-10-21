@@ -13,15 +13,15 @@ export class TodoService {
 
   private logger = new Logger(TodoService.name);
   
-  async getAll():Promise<{ todos: Todo[] }> {
+  async getAll() {
     this.logger.debug('grpc request: get all')
     const todos = await this.todoRepository.findAll();
     return { todos };
   }
 
-  async getById(id: string) {
+  async getById(id) {
     this.logger.debug('grpc request: get by id');
-    const todo = await this.todoRepository.findOne({ where: { uid: id }});
+    const todo = await this.todoRepository.findOne({ where: { uid: id.uid } });
     return todo;
     // try {
     //   const todo = this.todoRepository.findByPk(id);
@@ -39,11 +39,11 @@ export class TodoService {
   async create(todo: Todo) {
     this.logger.debug('grpc request: create');
     await this.todoRepository.create({
+      uid: todo.uid,
       title: todo.title,
       description: todo.description,
       time: todo.time,
-      completed: todo.completed,
-      uid: todo.uid
+      completed: todo.completed
     });
     // try {
     //   const prevLength = this.todoRepository.length;
@@ -85,7 +85,7 @@ export class TodoService {
   async editStatus(id) {
     this.logger.debug('grpc request: edit status');
 
-    const todo = await this.todoRepository.findOne({ where: { uid: id } });
+    const todo = await this.todoRepository.findByPk(id);
     todo.update({ completed: !todo.completed });
     todo.save();
   }
