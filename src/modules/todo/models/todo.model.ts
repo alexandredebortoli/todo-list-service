@@ -6,17 +6,17 @@ export class Todo extends Model {
     primaryKey: true,
     type: 'string'
   })
-  uid: string;
+  uid!: string;
 
   @Column
-  title: string;
+  title!: string;
 
   @Column
-  description: string;
+  description!: string;
 
   @Column
-  time: string;
+  time!: string; // Date
 
   @Column
-  completed: boolean;
+  completed!: boolean;
 }

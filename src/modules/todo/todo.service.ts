@@ -3,6 +3,7 @@ import { HttpException, Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { RpcException } from '@nestjs/microservices';
 import { UUIDV4 } from 'sequelize';
+import { ERROR } from 'sqlite3';
 
 @Injectable()
 export class TodoService {
@@ -23,13 +24,12 @@ export class TodoService {
     }
   }
 
-  async getById(id): Promise<Todo> {
+  async getById(uid: string): Promise<Todo> {
     this.logger.debug('grpc request: get by id');
     try {
-      const todo = await this.todoRepository.findOne({ where: { uid: id.uid } });
-      if(!todo) {
+      const todo = await this.todoRepository.findOne({ where: { uid } });
+      if(!todo)
         throw new RpcException('id not found');
-      }
       return todo;
     } catch (error) {
       this.logger.error(`grpc response: ${error.message}`);
@@ -46,37 +46,36 @@ export class TodoService {
         time: todo.time,
         completed: todo.completed
       });
-      this.logger.debug('grpc response: new todo created successfully')
+      this.logger.debug('grpc response: new todo created successfully');
     } catch (error) {
       this.logger.error('grpc response: todo missing required attributes');
+      throw new RpcException(error);
     }
   }
 
-  async edit(todo: Todo) {
+  async edit(todo: Todo): Promise<void> {
     this.logger.debug('grpc request: edit');
     try {
       const originalTodo = await this.todoRepository.findOne({ where: { uid: todo.uid } });
-      if (!originalTodo) {
+      if (!originalTodo)
         throw new RpcException("id not found");
-      }
       originalTodo.update(todo);
-      originalTodo.save();
     } catch (error) {
       this.logger.error(`grpc response: ${error.message}`);
+      throw new RpcException(error);
     }
   }
 
-  async editStatus(id) {
+  async editStatus(uid): Promise<void> {
     this.logger.debug('grpc request: edit status');
     try {
-      const todo = await this.todoRepository.findOne({ where: { uid: id.uid } });
-      if (!todo) {
+      const todo = await this.todoRepository.findOne({ where: { uid } });
+      if (!todo)
         throw new RpcException("id not found");
-      }
       todo.update({ completed: !todo.completed });
-      todo.save();
     } catch (error) {
       this.logger.error(`grpc response: ${error.message}`);
+      throw new RpcException(error);
     }
   }
 }
