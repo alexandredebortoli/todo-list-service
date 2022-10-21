@@ -19,7 +19,7 @@ export class TodoService {
       const todos = await this.todoRepository.findAll();
       return { todos };
     } catch (error) {
-      this.logger.error(error.message);
+      this.logger.error(`grpc response: ${error.message}`);
     }
   }
 
@@ -28,37 +28,28 @@ export class TodoService {
     try {
       const todo = await this.todoRepository.findOne({ where: { uid: id.uid } });
       if(!todo) {
-        throw new RpcException('id not found');
+        throw new RpcException('grpc response: id not found');
       }
       return todo;
     } catch (error) {
-      this.logger.error(error.message);
+      this.logger.error(`grpc response: ${error.message}`);
     }
   }
   
-  async create(todo: Todo) {
+  async create(todo: Todo): Promise<void> {
     this.logger.debug('grpc request: create');
-    await this.todoRepository.create({
-      uid: todo.uid,
-      title: todo.title,
-      description: todo.description,
-      time: todo.time,
-      completed: todo.completed
-    });
-    // try {
-    //   const prevLength = this.todoRepository.length;
-
-    //   this.todoRepository.create({ todo });
-
-    //   if (prevLength == this.todoRepository.length) {
-    //     throw new RpcException("unable to create todo");
-    //   }
-
-    //   return true;
-    // } catch (error) {
-    //   this.logger.error(error.message);
-    //   return false;
-    // }
+    try {
+      await this.todoRepository.create({
+        uid: todo.uid,
+        title: todo.title,
+        description: todo.description,
+        time: todo.time,
+        completed: todo.completed
+      });
+      this.logger.debug('grpc response: new todo created successfully')
+    } catch (error) {
+      this.logger.error('grpc response: todo missing required attributes');
+    }
   }
 
   async edit(todo: Todo) {
