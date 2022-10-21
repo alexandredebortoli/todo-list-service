@@ -1,6 +1,5 @@
 import { Sequelize } from 'sequelize-typescript';
 import { Todo } from 'src/modules/todo/models/todo.model';
-import { provide } from 'vue';
 
 export const createDb = [
   {

@@ -13,27 +13,27 @@ export class TodoService {
 
   private logger = new Logger(TodoService.name);
   
-  async getAll() {
+  async getAll(): Promise<{ todos: Todo[] }> {
     this.logger.debug('grpc request: get all')
-    const todos = await this.todoRepository.findAll();
-    return { todos };
+    try {
+      const todos = await this.todoRepository.findAll();
+      return { todos };
+    } catch (error) {
+      this.logger.error(error.message);
+    }
   }
 
-  async getById(id) {
+  async getById(id): Promise<Todo> {
     this.logger.debug('grpc request: get by id');
-    const todo = await this.todoRepository.findOne({ where: { uid: id.uid } });
-    return todo;
-    // try {
-    //   const todo = this.todoRepository.findByPk(id);
-
-    //   if (!todo) {
-    //     throw new RpcException("id not found");
-    //   }
-
-    //   return {...todo};
-    // } catch (error) {
-    //   this.logger.error(error.message);
-    // }
+    try {
+      const todo = await this.todoRepository.findOne({ where: { uid: id.uid } });
+      if(!todo) {
+        throw new RpcException('id not found');
+      }
+      return todo;
+    } catch (error) {
+      this.logger.error(error.message);
+    }
   }
   
   async create(todo: Todo) {
