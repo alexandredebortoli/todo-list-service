@@ -28,7 +28,7 @@ export class TodoService {
     try {
       const todo = await this.todoRepository.findOne({ where: { uid: id.uid } });
       if(!todo) {
-        throw new RpcException('grpc response: id not found');
+        throw new RpcException('id not found');
       }
       return todo;
     } catch (error) {
@@ -52,25 +52,18 @@ export class TodoService {
     }
   }
 
-  async edit(todo: Todo) {
+  async edit(id, todo: Todo) {
     this.logger.debug('grpc request: edit');
-
-
-
-    const oldTodo = await this.todoRepository.findByPk(todo.uid);
-    oldTodo.update(todo);
-    oldTodo.save();
-    
-    // try {
-    //   const todo = this.getById(id);
-
-    //   if (!todo) {
-    //     throw new RpcException("id not found");
-    //   }
-
-    // } catch (error) {
-    //   this.logger.error(error.message);
-    // }
+    try {
+      const originalTodo = await this.todoRepository.findOne({ where: { uid: id.uid } });
+      if (!originalTodo) {
+        throw new RpcException("id not found");
+      }
+      originalTodo.update(todo);
+      originalTodo.save();
+    } catch (error) {
+      this.logger.error(`grpc response: ${error.message}`);
+    }
   }
 
   async editStatus(id) {
