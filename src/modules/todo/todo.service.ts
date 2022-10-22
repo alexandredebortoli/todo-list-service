@@ -15,13 +15,9 @@ export class TodoService {
   private logger = new Logger(TodoService.name);
   
   async getAll(): Promise<{ todos: Todo[] }> {
-    this.logger.debug('grpc request: get all')
-    try {
+    this.logger.debug('grpc request: get all');
       const todos = await this.todoRepository.findAll();
       return { todos };
-    } catch (error) {
-      this.logger.error(`grpc response: ${error.message}`);
-    }
   }
 
   async getById(uid: string): Promise<Todo> {
@@ -33,6 +29,7 @@ export class TodoService {
       return todo;
     } catch (error) {
       this.logger.error(`grpc response: ${error.message}`);
+      throw new RpcException(error);
     }
   }
   
