@@ -36,10 +36,10 @@ describe('todoController',() => {
         controllers: [TodoController],
         providers: [
           { provide: TodoService, 
-            useValue: {getAll: jest.fn(() => {
-              return todoList;
-            }
-            )} 
+            useValue: {
+              getAll: jest.fn(() => { return todoList }),
+              getById: jest.fn(() => { return todoList.find((todo)=>todo.uid = '2')})
+            } 
           }
         ]
       }
@@ -49,10 +49,37 @@ describe('todoController',() => {
 
   describe('getAll', () => {
     it(
-      'deve retornar lista de todos',
+      'must return a todoList',
       async () => {
         const actual = await todoController.getAll();
         expect(actual).toEqual(todoList);
+      }
+    )
+  })
+  describe('getById', () => {
+    it(
+      'must return a todo',
+      async () => {
+        const actual = await todoController.getById({uid:'2'});
+        expect(actual).toEqual(todoList.find((todo) => todo.uid = '2'));
+      }
+    )
+  })
+  describe('getById', () => {
+    it(
+      'must return an edited todo',
+      async () => {
+        const actual = await todoController.getById({uid:'2'});
+        expect(actual).toEqual(todoList.find((todo) => todo.uid = '2'));
+      }
+    )
+  })
+  describe('getById', () => {
+    it(
+      'must return a todo with status updated',
+      async () => {
+        const actual = await todoController.getById({uid:'2'});
+        expect(actual).toEqual(todoList.find((todo) => todo.uid = '2'));
       }
     )
   })
