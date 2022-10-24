@@ -30,7 +30,6 @@ describe('TodoService', () => {
     it('should return a list with every todo', async () => {
 
       const actual = await todoService.getAll();
-      console.log(actual);
       expect(actual.todos.length).toEqual(2);
     });
   });
