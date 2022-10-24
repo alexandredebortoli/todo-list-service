@@ -22,6 +22,8 @@ module.exports = {
     '<rootDir>/src/config',
     '.mock.ts',
     'main.ts',
+    'sequelize.ts',
+    'todo.providers.ts'
   ],
   testEnvironment: 'node',
 }
