@@ -11,20 +11,16 @@ describe('TodoService', () => {
   let testDb: Sequelize;
 
   beforeAll(async () => {
-    // Initiate Sequelize with SQLite and our models
     testDb = await createTestDb();
 
-    // Creation of our todos
     await createTodo('1', 'Café', 'primeira refeição do dia', '07:00am', true);
     await createTodo('2', 'Almoço', 'segunda refeição do dia', '12:00pm', true);
 
-    // Instantiate our service with our model
     todoService = new TodoService(Todo);
   });
 
   afterAll(() => testDb.close());
 
-  // TEST GET ALL
   describe('getAll', () => {
 
     it('should return a list with every todo', async () => {
@@ -34,7 +30,6 @@ describe('TodoService', () => {
     });
   });
 
-  // TEST GET BY ID
   describe('getById', () => {
 
     it('should return a todo', async () => {
@@ -51,7 +46,6 @@ describe('TodoService', () => {
     });
   });
 
-  // TEST CREATE
   describe('create', () => {
 
     it('should return the added todo', async () => {
@@ -80,10 +74,8 @@ describe('TodoService', () => {
         expect(error.message).toMatch('uid already exists');
       }
     });
-    // não consigo testar passando todo com parâmetros faltando
   });
 
-  // TEST EDIT
   describe('edit', () => {
 
     it('should return a todo', async () => {
@@ -107,7 +99,6 @@ describe('TodoService', () => {
     });
   });
 
-  // TESTE STATUS
   describe('editStatus', () => {
 
     it('should return a todo', async () => {
