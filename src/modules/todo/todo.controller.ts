@@ -2,6 +2,7 @@ import { TodoService } from './todo.service';
 import { Metadata, ServerUnaryCall } from "@grpc/grpc-js";
 import { Controller } from "@nestjs/common";
 import { GrpcMethod } from "@nestjs/microservices";
+import { Todo } from './models/todo.model';
 
 @Controller()
 export class TodoController {
@@ -13,21 +14,21 @@ export class TodoController {
   }
 
   @GrpcMethod('TodoService', 'getById')
-  getById(id) {
-    return this.todoService.getById(id);
+  getById({uid}: {uid: string}) {
+    return this.todoService.getById(uid);
   }
 
   @GrpcMethod('TodoService', 'create')
-  create(todo) {
+  create(todo: Todo) {
     return this.todoService.create(todo);
   }
 
   @GrpcMethod('TodoService', 'edit')
-  edit(todo) {
+  edit(todo: Todo) {
     return this.todoService.edit(todo);
   }
   @GrpcMethod('TodoService', 'editStatus')
-  editStatus(id) {
-    return this.todoService.editStatus(id);
+  editStatus({uid}: {uid: string}) {
+    return this.todoService.editStatus(uid);
   }
 }
