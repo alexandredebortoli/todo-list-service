@@ -1,3 +1,5 @@
+import { EditTodoDTO } from './dto/edit-todo.dto';
+import { TodoDTO } from './dto/todo.dto';
 import { createTestDb } from '../../config/testing-helpers/sequelize-test';
 import { Sequelize } from 'sequelize-typescript';
 import { TodoService } from './todo.service';
@@ -19,36 +21,12 @@ describe('TodoService', () => {
     // Instantiate our service with our model
     todoService = new TodoService(Todo);
   });
+
   afterAll(() => testDb.close());
 
-  // TEST CREATE
-  describe('create', () => {
-    it('should return each todo added', async () => {
-      const newTodo: Todo = new Todo({
-        uid: '3',
-        title: 'Janta',
-        description: 'última refeição do dia',
-        time: '07:00pm',
-        completed: false
-      });
-      const actual = await todoService.create(newTodo);
-      expect(actual).toBeTruthy();
-    });
-    it('should return an error', async () => {
-      try {
-        const newTodo: Todo = new Todo({
-          description: 'última refeição do dia',
-          time: '07:00pm',
-          completed: false
-        });
-        await todoService.create(newTodo);
-      } catch (error) {
-        expect(error.message).toMatch('todo missing required attributes');
-      }
-    });
-  });
   // TEST GET ALL
   describe('getAll', () => {
+
     it('should return a list with every todo', async () => {
 
       const actual = await todoService.getAll();
@@ -56,12 +34,15 @@ describe('TodoService', () => {
       expect(actual.todos.length).toEqual(2);
     });
   });
+
   // TEST GET BY ID
   describe('getById', () => {
+
     it('should return a todo', async () => {
       const actual = await todoService.getById('2');
       expect(actual).toBeTruthy();
     });
+
     it('should return a error', async () => {
       try {
         await todoService.getById('4');
@@ -70,8 +51,42 @@ describe('TodoService', () => {
       }
     });
   });
+
+  // TEST CREATE
+  describe('create', () => {
+
+    it('should return the added todo', async () => {
+      const newTodo: TodoDTO = {
+        uid: '3',
+        title: 'Janta',
+        description: 'última refeição do dia',
+        time: '07:00pm',
+        completed: false
+      }
+      const actual = await todoService.create(newTodo);
+      expect(actual).toBeTruthy();
+    });
+
+    it('should return an error', async () => {
+      try {
+        const newTodo: TodoDTO = {
+          uid: '3',
+          title: 'Janta',
+          description: 'última refeição do dia',
+          time: '07:00pm',
+          completed: false
+        }
+        await todoService.create(newTodo);
+      } catch (error) {
+        expect(error.message).toMatch('uid already exists');
+      }
+    });
+    // não consigo testar passando todo com parâmetros faltando
+  });
+
   // TEST EDIT
   describe('edit', () => {
+
     it('should return a todo', async () => {
       const editTodo: Todo = new Todo({
         uid: '2', 
@@ -80,6 +95,7 @@ describe('TodoService', () => {
       const actual = await todoService.edit(editTodo);
       expect(actual).toBeTruthy();
     });
+
     it('should return a error', async () => {
       try {
         const editTodo: Todo = new Todo({
@@ -92,8 +108,10 @@ describe('TodoService', () => {
       }
     });
   });
+
   // TESTE STATUS
   describe('status', () => {
+
     it('should return a todo', async () => {
       const editTodoStatus: Todo = new Todo({
         uid: '2'
@@ -101,6 +119,7 @@ describe('TodoService', () => {
       const actual = await todoService.edit(editTodoStatus);
       expect(actual).toBeTruthy();
     });
+    
     it('should return a error', async () => {
       try {
         const editTodoStatus: Todo = new Todo({
