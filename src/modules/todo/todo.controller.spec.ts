@@ -38,7 +38,10 @@ describe('todoController',() => {
           { provide: TodoService, 
             useValue: {
               getAll: jest.fn(() => { return todoList }),
-              getById: jest.fn(() => { return todoList.find((todo)=>todo.uid = '2')})
+              getById: jest.fn(() => { return todoList.find((todo)=>todo.uid = '2')}),
+              create: jest.fn(() => {return todoList.find((todo)=>todo.uid = '1')}),
+              edit: jest.fn(() => {return todoList.find((todo)=>todo.uid = '1')}),
+              editStatus: jest.fn(() => {return todoList.find((todo)=>todo.uid = '1')})
             } 
           }
         ]
@@ -51,8 +54,7 @@ describe('todoController',() => {
     it(
       'must return a todoList',
       async () => {
-        const actual = await todoController.getAll();
-        expect(actual).toEqual(todoList);
+        expect(await todoController.getAll()).toEqual(todoList);
       }
     )
   })
@@ -60,26 +62,31 @@ describe('todoController',() => {
     it(
       'must return a todo',
       async () => {
-        const actual = await todoController.getById({uid:'2'});
-        expect(actual).toEqual(todoList.find((todo) => todo.uid = '2'));
+        expect(await todoController.getById({uid:'2'})).toEqual(todoList.find((todo) => todo.uid = '2'));
       }
     )
   })
-  describe('getById', () => {
+  describe('create', () => {
     it(
-      'must return an edited todo',
+      'must return a todo',
       async () => {
-        const actual = await todoController.getById({uid:'2'});
-        expect(actual).toEqual(todoList.find((todo) => todo.uid = '2'));
+        expect(await todoController.create(todoList.at(1))).toEqual(todoList.find((todo) => todo.uid = '1'));
       }
     )
   })
-  describe('getById', () => {
+  describe('edit', () => {
     it(
-      'must return a todo with status updated',
+      'must return a todo',
       async () => {
-        const actual = await todoController.getById({uid:'2'});
-        expect(actual).toEqual(todoList.find((todo) => todo.uid = '2'));
+        expect(await todoController.edit(todoList.at(1))).toEqual(todoList.find((todo) => todo.uid = '1'));
+      }
+    )
+  })
+  describe('editStatus', () => {
+    it(
+      'must return a todo',
+      async () => {
+        expect(await todoController.editStatus({uid:'1'})).toEqual(todoList.find((todo) => todo.uid = '1'));
       }
     )
   })
