@@ -74,6 +74,21 @@ describe('TodoService', () => {
         expect(error.message).toMatch('uid already exists');
       }
     });
+
+    it('should return an error', async () => {
+      try {
+        const newTodo: TodoDTO = {
+          uid: '4',
+          title: null,
+          description: null,
+          time: null,
+          completed: null
+        }
+        await todoService.create(newTodo);
+      } catch (error) {
+        expect(error.message).toMatch('notNull Violation');
+      }
+    });
   });
 
   describe('edit', () => {

@@ -4,19 +4,28 @@ import { Column, Model, Table } from 'sequelize-typescript';
 export class Todo extends Model {
   @Column({
     primaryKey: true,
-    type: 'string'
+    type: 'string',
+    allowNull: false
   })
   uid!: string;
 
-  @Column
+  @Column({
+    allowNull: false
+  })
   title!: string;
 
-  @Column
+  @Column({
+    allowNull: false
+  })
   description!: string;
 
-  @Column
+  @Column({
+    allowNull: false
+  })
   time!: string; // Date
 
-  @Column
+  @Column({
+    allowNull: false
+  })
   completed!: boolean;
 }
