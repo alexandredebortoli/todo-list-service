@@ -1,7 +1,7 @@
 import { EditTodoDTO } from './dto/edit-todo.dto';
 import { TodoService } from './todo.service';
-import { Controller } from "@nestjs/common";
-import { GrpcMethod } from "@nestjs/microservices";
+import { Controller } from '@nestjs/common';
+import { GrpcMethod } from '@nestjs/microservices';
 import { TodoDTO } from './dto/todo.dto';
 
 @Controller()
@@ -14,7 +14,7 @@ export class TodoController {
   }
 
   @GrpcMethod('TodoService', 'getById')
-  getById({uid}: {uid: string}) {
+  getById({ uid }: { uid: string }) {
     return this.todoService.getById(uid);
   }
 
@@ -28,7 +28,7 @@ export class TodoController {
     return this.todoService.edit(todo);
   }
   @GrpcMethod('TodoService', 'editStatus')
-  editStatus({uid}: {uid: string}) {
+  editStatus({ uid }: { uid: string }) {
     return this.todoService.editStatus(uid);
   }
 }
