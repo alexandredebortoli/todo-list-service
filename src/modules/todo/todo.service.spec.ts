@@ -88,20 +88,19 @@ describe('TodoService', () => {
   describe('edit', () => {
 
     it('should return a todo', async () => {
-      const editTodo: Todo = new Todo({
-        uid: '2', 
-        title: 'almoco editado'
-      });
-      const actual = await todoService.edit(editTodo);
-      expect(actual).toBeTruthy();
+      const editTodo: EditTodoDTO = {
+        uid: '3',
+        title: 'Janta editada'
+      }
+      expect(todoService.edit(editTodo)).toBeTruthy();
     });
 
     it('should return a error', async () => {
       try {
-        const editTodo: Todo = new Todo({
-          uid: '5', 
-          title: 'tentando editar'
-        });
+        const editTodo: EditTodoDTO = {
+          uid: '7',
+          title: 'Janta editada'
+        }
         await todoService.edit(editTodo);
       } catch (error) {
         expect(error.message).toMatch('id not found');
@@ -110,22 +109,15 @@ describe('TodoService', () => {
   });
 
   // TESTE STATUS
-  describe('status', () => {
+  describe('editStatus', () => {
 
     it('should return a todo', async () => {
-      const editTodoStatus: Todo = new Todo({
-        uid: '2'
-      });
-      const actual = await todoService.edit(editTodoStatus);
-      expect(actual).toBeTruthy();
+      expect(await todoService.editStatus('3')).toBeTruthy();
     });
-    
+  
     it('should return a error', async () => {
       try {
-        const editTodoStatus: Todo = new Todo({
-          uid: '9'
-        });
-        await todoService.edit(editTodoStatus);
+        await todoService.editStatus('7');
       } catch (error) {
         expect(error.message).toMatch('id not found');
       }
