@@ -1,8 +1,8 @@
+import { EditTodoDTO } from './dto/edit-todo.dto';
 import { TodoService } from './todo.service';
-import { Metadata, ServerUnaryCall } from "@grpc/grpc-js";
 import { Controller } from "@nestjs/common";
 import { GrpcMethod } from "@nestjs/microservices";
-import { Todo } from './models/todo.model';
+import { TodoDTO } from './dto/todo.dto';
 
 @Controller()
 export class TodoController {
@@ -19,12 +19,12 @@ export class TodoController {
   }
 
   @GrpcMethod('TodoService', 'create')
-  create(todo: Todo) {
+  async create(todo: TodoDTO) {
     return this.todoService.create(todo);
   }
 
   @GrpcMethod('TodoService', 'edit')
-  edit(todo: Todo) {
+  edit(todo: EditTodoDTO) {
     return this.todoService.edit(todo);
   }
   @GrpcMethod('TodoService', 'editStatus')
