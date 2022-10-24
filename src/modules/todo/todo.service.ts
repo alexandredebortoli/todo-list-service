@@ -1,10 +1,7 @@
 import { TodoDTO } from './dto/todo.dto';
 import { Todo } from './models/todo.model';
-import { HttpException, Inject, Injectable, Logger } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
-import { UUIDV4, where } from 'sequelize';
-import { ERROR } from 'sqlite3';
 import { EditTodoDTO } from './dto/edit-todo.dto';
 
 @Injectable()

@@ -1,7 +1,6 @@
 import { TodoService } from './todo.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TodoController } from './todo.controller';
-import { Todo } from './models/todo.model';
 
 const todoList = [
   {

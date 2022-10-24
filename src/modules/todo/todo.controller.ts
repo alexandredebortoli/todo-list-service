@@ -2,7 +2,6 @@ import { EditTodoDTO } from './dto/edit-todo.dto';
 import { TodoService } from './todo.service';
 import { Controller } from "@nestjs/common";
 import { GrpcMethod } from "@nestjs/microservices";
-import { Todo } from './models/todo.model';
 import { TodoDTO } from './dto/todo.dto';
 
 @Controller()
