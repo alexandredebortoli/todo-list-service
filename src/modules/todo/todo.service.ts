@@ -2,7 +2,7 @@ import { Todo } from './models/todo.model';
 import { HttpException, Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { RpcException } from '@nestjs/microservices';
-import { UUIDV4 } from 'sequelize';
+import { UUIDV4, where } from 'sequelize';
 import { ERROR } from 'sqlite3';
 
 @Injectable()
@@ -33,7 +33,7 @@ export class TodoService {
     }
   }
   
-  async create(todo: Todo): Promise<void> {
+  async create(todo: Todo): Promise<Todo> {
     this.logger.debug('grpc request: create');
     try {
       await this.todoRepository.create({
@@ -44,32 +44,36 @@ export class TodoService {
         completed: todo.completed
       });
       this.logger.debug('grpc response: new todo created successfully');
+      return this.todoRepository.findOne({ where: { uid: todo.uid } });
     } catch (error) {
-      this.logger.error('grpc response: todo missing required attributes');
+      error.message = 'todo missing required attributes';
+      this.logger.error(`grpc response: ${error.message}`);
       throw new RpcException(error);
     }
   }
 
-  async edit(todo: Todo): Promise<void> {
+  async edit(todo: Todo): Promise<Todo> {
     this.logger.debug('grpc request: edit');
     try {
       const originalTodo = await this.todoRepository.findOne({ where: { uid: todo.uid } });
       if (!originalTodo)
         throw new RpcException("id not found");
       originalTodo.update(todo);
+      return originalTodo;
     } catch (error) {
       this.logger.error(`grpc response: ${error.message}`);
       throw new RpcException(error);
     }
   }
 
-  async editStatus(uid): Promise<void> {
+  async editStatus(uid: string): Promise<Todo> {
     this.logger.debug('grpc request: edit status');
     try {
       const todo = await this.todoRepository.findOne({ where: { uid } });
       if (!todo)
         throw new RpcException("id not found");
       todo.update({ completed: !todo.completed });
+      return todo;
     } catch (error) {
       this.logger.error(`grpc response: ${error.message}`);
       throw new RpcException(error);
