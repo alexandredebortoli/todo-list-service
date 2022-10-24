@@ -4,7 +4,7 @@ import { Todo } from 'src/modules/todo/models/todo.model';
 export const createDb = [
   {
     provide: 'SEQUELIZE',
-    useFactory: async ()=>{
+    useFactory: async () => {
       const db = new Sequelize({
         dialect: 'sqlite',
         host: 'localhost',
@@ -12,14 +12,11 @@ export const createDb = [
         username: 'root',
         password: 'root',
         database: 'tododb',
-        storage: ':memory:'
+        storage: ':memory:',
       });
-      db.addModels([
-        Todo
-      ]);
+      db.addModels([Todo]);
       await db.sync();
       return db;
     },
-
-  }
-]
+  },
+];

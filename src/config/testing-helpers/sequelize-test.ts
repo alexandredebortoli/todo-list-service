@@ -9,11 +9,9 @@ export async function createTestDb() {
     username: 'root',
     password: 'root',
     database: 'testdb',
-    storage: ':memory:'
+    storage: ':memory:',
   });
-  testDb.addModels([
-    Todo
-  ]);
+  testDb.addModels([Todo]);
   await testDb.sync();
   return testDb;
 }

@@ -5,27 +5,27 @@ export class Todo extends Model {
   @Column({
     primaryKey: true,
     type: 'string',
-    allowNull: false
+    allowNull: false,
   })
   uid!: string;
 
   @Column({
-    allowNull: false
+    allowNull: false,
   })
   title!: string;
 
   @Column({
-    allowNull: false
+    allowNull: false,
   })
   description!: string;
 
   @Column({
-    allowNull: false
+    allowNull: false,
   })
   time!: string; // Date
 
   @Column({
-    allowNull: false
+    allowNull: false,
   })
   completed!: boolean;
 }

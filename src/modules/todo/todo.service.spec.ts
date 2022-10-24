@@ -22,16 +22,13 @@ describe('TodoService', () => {
   afterAll(() => testDb.close());
 
   describe('getAll', () => {
-
     it('should return a list with every todo', async () => {
-
       const actual = await todoService.getAll();
       expect(actual.todos.length).toEqual(2);
     });
   });
 
   describe('getById', () => {
-
     it('should return a todo', async () => {
       const actual = await todoService.getById('2');
       expect(actual).toBeTruthy();
@@ -47,15 +44,14 @@ describe('TodoService', () => {
   });
 
   describe('create', () => {
-
     it('should return the added todo', async () => {
       const newTodo: TodoDTO = {
         uid: '3',
         title: 'Janta',
         description: 'última refeição do dia',
         time: '07:00pm',
-        completed: false
-      }
+        completed: false,
+      };
       const actual = await todoService.create(newTodo);
       expect(actual).toBeTruthy();
     });
@@ -67,8 +63,8 @@ describe('TodoService', () => {
           title: 'Janta',
           description: 'última refeição do dia',
           time: '07:00pm',
-          completed: false
-        }
+          completed: false,
+        };
         await todoService.create(newTodo);
       } catch (error) {
         expect(error.message).toMatch('uid already exists');
@@ -82,8 +78,8 @@ describe('TodoService', () => {
           title: null,
           description: null,
           time: null,
-          completed: null
-        }
+          completed: null,
+        };
         await todoService.create(newTodo);
       } catch (error) {
         expect(error.message).toMatch('notNull Violation');
@@ -92,12 +88,11 @@ describe('TodoService', () => {
   });
 
   describe('edit', () => {
-
     it('should return a todo', async () => {
       const editTodo: EditTodoDTO = {
         uid: '3',
-        title: 'Janta editada'
-      }
+        title: 'Janta editada',
+      };
       expect(todoService.edit(editTodo)).toBeTruthy();
     });
 
@@ -105,8 +100,8 @@ describe('TodoService', () => {
       try {
         const editTodo: EditTodoDTO = {
           uid: '7',
-          title: 'Janta editada'
-        }
+          title: 'Janta editada',
+        };
         await todoService.edit(editTodo);
       } catch (error) {
         expect(error.message).toMatch('id not found');
@@ -115,11 +110,10 @@ describe('TodoService', () => {
   });
 
   describe('editStatus', () => {
-
     it('should return a todo', async () => {
       expect(await todoService.editStatus('3')).toBeTruthy();
     });
-  
+
     it('should return a error', async () => {
       try {
         await todoService.editStatus('7');
