@@ -11,12 +11,13 @@
     }
   },
   "lint-staged": {
-    "src/*": [
-      "prettier --write",
-      "git add"
+    "**/*.{js,jsx,ts,tsx}": [
+      "yarn prettier --write",
+      "yarn eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
     ]
   },
   "scripts": {
+    "postinstall": "husky install",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",

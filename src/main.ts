@@ -14,7 +14,7 @@ async function bootstrap() {
     },
   });
           await app.listen().then(() => {
-                  Logger.debug(`gRPC Server 5000`);
+                    Logger.debug(`gRPC Server 5000`);
           });
 }
 bootstrap();
