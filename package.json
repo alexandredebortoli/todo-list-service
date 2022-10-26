@@ -5,6 +5,11 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "husky": {
+    "hooks": {
+      "pre-commit": "echo 'teste'"
+    }
+  },
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
@@ -53,6 +58,7 @@
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^8.0.1",
     "jest": "^29.2.1",
     "prettier": "^2.3.2",
     "source-map-support": "^0.5.20",
