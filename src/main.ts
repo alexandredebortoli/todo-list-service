@@ -13,8 +13,8 @@ async function bootstrap() {
       protoPath: join(__dirname, 'proto/todo-service.proto'),
     },
   });
-  await app.listen().then(() => {
-    Logger.debug(`gRPC Server 5000`);
-  });
+          await app.listen().then(() => {
+                  Logger.debug(`gRPC Server 5000`);
+          });
 }
 bootstrap();
