@@ -8,8 +8,7 @@
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
       "yarn prettier --write",
-      "yarn eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-      "git add"
+      "yarn eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
     ]
   },
   "scripts": {
