@@ -39,7 +39,6 @@ export class TodoService {
       });
       if (todoExists) throw new RpcException('uid already exists');
       await this.todoRepository.create({ ...todo });
-      this.logger.debug('grpc response: new todo created successfully');
       return await this.getById(todo.uid);
     } catch (error) {
       this.logger.error(`grpc response: ${error.message}`);
@@ -54,8 +53,8 @@ export class TodoService {
         where: { uid: todo.uid },
       });
       if (!originalTodo) throw new RpcException('id not found');
-      originalTodo.update(todo);
-      return this.getById(todo.uid);
+      await originalTodo.update(todo);
+      return await this.getById(todo.uid);
     } catch (error) {
       this.logger.error(`grpc response: ${error.message}`);
       throw new RpcException(error);
@@ -67,7 +66,7 @@ export class TodoService {
     try {
       const todo = await this.todoRepository.findOne({ where: { uid } });
       if (!todo) throw new RpcException('id not found');
-      todo.update({ completed: !todo.completed });
+      await todo.update({ completed: !todo.completed });
       return todo;
     } catch (error) {
       this.logger.error(`grpc response: ${error.message}`);
