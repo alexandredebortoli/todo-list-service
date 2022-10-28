@@ -9,26 +9,26 @@ export class TodoController {
   constructor(private todoService: TodoService) {}
 
   @GrpcMethod('TodoService', 'getAll')
-  getAll() {
+  async getAll(): Promise<{ todos: TodoDTO[] }> {
     return this.todoService.getAll();
   }
 
   @GrpcMethod('TodoService', 'getById')
-  getById({ uid }: { uid: string }) {
+  async getById({ uid }: { uid: string }): Promise<TodoDTO> {
     return this.todoService.getById(uid);
   }
 
   @GrpcMethod('TodoService', 'create')
-  async create(todo: TodoDTO) {
-    return this.todoService.create(todo);
+  async create(todo: TodoDTO): Promise<TodoDTO> {
+    return await this.todoService.create(todo);
   }
 
   @GrpcMethod('TodoService', 'edit')
-  edit(todo: EditTodoDTO) {
-    return this.todoService.edit(todo);
+  async edit(todo: EditTodoDTO): Promise<TodoDTO> {
+    return await this.todoService.edit(todo);
   }
   @GrpcMethod('TodoService', 'editStatus')
-  editStatus({ uid }: { uid: string }) {
-    return this.todoService.editStatus(uid);
+  async editStatus({ uid }: { uid: string }): Promise<TodoDTO> {
+    return await this.todoService.editStatus(uid);
   }
 }

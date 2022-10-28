@@ -5,9 +5,9 @@ package todoService;
 service TodoService {
   rpc getAll (Empty) returns (Todos) {}
   rpc getById (Uid) returns (Todo) {}
-  rpc create (Todo) returns (Empty) {}
-  rpc edit (Todo) returns (Empty) {}
-  rpc editStatus (Uid) returns (Empty) {}
+  rpc create (Todo) returns (Todo) {}
+  rpc edit (Todo) returns (Todo) {}
+  rpc editStatus (Uid) returns (Todo) {}
 }
 
 message Empty {}
